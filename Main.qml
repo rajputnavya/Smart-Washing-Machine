@@ -10,22 +10,23 @@ Window {
     title: qsTr("Smart Washing Machine")
     color: "#1a2a3a"
 
-    /* Background Gradient Style
-    Rectangle{
-        id: backgroundId
-        anchors.fill: parent
-        gradient: Gradient{
-            orientation: Gradient.Vertical
-            GradientStop {position: 0.0; color: "#3282B8"}
-            // GradientStop {position: 0.3; color: "#0F4C75"}
-            GradientStop {position: 0.5; color: "#0F4C75"}
-            GradientStop {position: 0.7; color: "#1B262C"}
-            GradientStop {position: 1.0; color: "#1B262C"}
-        }
-        border.color: "black"
-        border.width: 1
-    }
-    */
+    // //Background Color
+    // Rectangle{
+    //     id: backgroundId
+    //     anchors.fill: parent
+    //     // gradient: Gradient{
+    //     //     orientation: Gradient.Vertical
+    //     //     GradientStop {position: 0.0; color: "#3282B8"}
+    //     //     // GradientStop {position: 0.3; color: "#0F4C75"}
+    //     //     GradientStop {position: 0.5; color: "#0F4C75"}
+    //     //     GradientStop {position: 0.7; color: "#1B262C"}
+    //     //     GradientStop {position: 1.0; color: "#1B262C"}
+    //     // }
+    //     color: "#1a2a3a"
+    //     border.color: "steelblue"
+    //     border.width: 1
+    // }
+
 
     GridLayout{
         anchors.fill: parent
@@ -45,6 +46,7 @@ Window {
 
         //Electricity Price Plane
         ElectricityPricePlan{
+            id: electricityPricePlanId
             Layout.fillWidth: parent
             Layout.fillHeight: parent
         }
@@ -69,9 +71,16 @@ Window {
 
             onScheduleHourChanged: function(selectedHour){
                 console.log("Schedule Hour Changed to: "+ selectedHour)
+                electricityPricePlanId.updateScheduledTime(
+                            parseInt(selectedHour),
+                            electricityPricePlanId.scheduledMinute)
             }
             onScheduleMinuteChanged: function(selectedMinute){
                 console.log("Schedule Minute Changed to: "+ selectedMinute)
+                electricityPricePlanId.updateScheduledTime(
+                    electricityPricePlanId.scheduledHour,    // keep existing hour
+                    parseInt(selectedMinute)
+                )
             }
         }
 
@@ -137,9 +146,9 @@ Window {
                     scheduleOptionsId.selectedMode = "Manual Time"
 
                     //Reset Savings, Wash Time and Cost to 0
-                    scheduleOptionsId.savings = 0
-                    headerBarId.estimatedCost = 0
-                    headerBarId.washTime = 0
+                    // scheduleOptionsId.savings = 0
+                    // headerBarId.estimatedCost = 0
+                    // headerBarId.washTime = 0
                 }
                 onRejected: {
                     console.log("Resetting Wash Schedule Canceled")
