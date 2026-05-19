@@ -11,6 +11,8 @@ Item {
     // Current time properties
     property int currentHour: 0
     property int currentMinute: 0
+    property int scheduledHour: 0
+    property int scheduledMinute: 0
 
     // Timer to update every minute
     Timer {
@@ -25,6 +27,12 @@ Item {
             currentMinute = now.getMinutes()
             electricityPricePlanDial.requestPaint()  // redraw the canvas
         }
+    }
+
+    function updateScheduledTime(hour, minute) {
+        scheduledHour = hour
+        scheduledMinute = minute
+        electricityPricePlanDial.requestPaint()
     }
 
     //Background
@@ -184,7 +192,9 @@ Item {
 
                     // Arrows
                     //Scheduled
-                    var scheduledArrowAngle = degToRad(220) //connect to signal
+                        // var scheduledArrowAngle = degToRad(220) //connect to signal
+                    var totalScheduledHours = scheduledHour + scheduledMinute / 60.0
+                    var scheduledArrowAngle = degToRad(totalScheduledHours * 15 - 90)
                     var scheduledArrowRadius = outerRadius - 30
                     // Calculate arrow position
                     var ax = cx + Math.cos(scheduledArrowAngle) * scheduledArrowRadius
